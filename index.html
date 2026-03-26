@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sultana</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(270deg, #ff7eb3, #ff758c, #42a5f5, #7e57c2);
+  background-size: 800% 800%;
+  animation: gradientBG 12s ease infinite;
+  color: white;
+  overflow: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glow {
+  0%, 100% { color: #facc15; text-shadow: 0 0 5px #facc15; }
+  50% { color: #ff3e00; text-shadow: 0 0 20px #ff3e00; }
+}
+
+.name-highlight {
+  font-weight: bold;
+  animation: glow 1.5s infinite;
+}
+
+#intro {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  flex-direction: column;
+}
+
+#intro button {
+  padding: 15px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  background: #22c55e;
+  color: white;
+  cursor: pointer;
+}
+
+.container {
+  display: none;
+  max-width: 600px;
+  margin: auto;
+  margin-top: 40px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(12px);
+  padding: 25px;
+  border-radius: 20px;
+}
+
+h1 { text-align: center; }
+
+p { white-space: pre-line; line-height: 1.7; font-size: 15px; }
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <h2>Tap to Begin 🤍</h2>
+  <button onclick="startExperience()">Start</button>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<div class="container" id="main">
+<h1>For my <span class="name-highlight">Sultana</span>, my brown eyes 🤍</h1>
+<p id="text"></p>
+<button onclick="startConfetti()">Celebrate 🎉</button>
+</div>
+
+<audio id="audio" loop autoplay>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f4a2c3c0e.mp3?filename=arabic-nasheed-soft-ambient-110624.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const message = `We were young when we met…
+like two souls that recognized something rare,
+but didn’t yet understand the weight of it.
+
+We called it love…
+but back then, love was just a feeling to us,
+not a responsibility, not a trust, not a path.
+
+So we held something sacred with unready hands…
+and it slipped, not because it was weak,
+but because we hadn’t grown into it yet.
+
+And now you’ve returned…
+not as who you were, and neither am I.
+Time has softened some parts of us,
+and strengthened others we didn’t even know we had.
+
+What we had was never ordinary.
+It wasn’t loud or perfect… but it was real,
+the kind of real that lingers even after distance,
+the kind that doesn’t beg to be replaced.
+
+But if there is still a “us” hidden in all of this…
+then I don’t want to touch it the way we did before.
+
+I don’t want something temporary,
+something uncertain, something we have to hide.
+
+If I choose you now…
+I choose you with intention.
+I choose you in a way that has direction,
+in a way that is *halal*, clean, and protected.
+
+Not just feelings in the moment,
+but something that can stand in the light without fear…
+something that can grow into commitment, into something real and lasting.
+
+Because you… you’re not a moment to me.
+You’re not a chapter I just pass through.
+
+You’re a story I would only write again
+if I can write it the right way this time.
+
+So if you come back to me…
+come with clarity, come with truth, come with a heart that understands now.
+
+And maybe… just maybe…
+what we lost wasn’t the end of us—
+it was Allah giving us time to grow
+so we could meet again… and finally do it right.
+
+PS: <span class='name-highlight'>Sultana</span>, you are always in my heart.`;
+
+let i = 0;
+function typeWriter() {
+  if (i < message.length) {
+    document.getElementById("text").innerHTML += message.charAt(i);
+    i++;
+    setTimeout(typeWriter, 30);
+  }
+}
+
+function startExperience() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('main').style.display = 'block';
+  document.body.style.overflow = 'auto';
+  document.getElementById('audio').play().catch(()=>{});
+  typeWriter();
+}
+
+// Confetti
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let pieces = [];
+
+function createConfetti() {
+  for (let i = 0; i < 200; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      size: Math.random() * 6 + 4,
+      speed: Math.random() * 3 + 2,
+      color: `hsl(${Math.random() * 360}, 100%, 60%)`
+    });
+  }
+}
+
+function updateConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  pieces.forEach(p => {
+    p.y += p.speed;
+    if (p.y > canvas.height) p.y = -10;
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, p.size, p.size);
+  });
+  requestAnimationFrame(updateConfetti);
+}
+
+function startConfetti() {
+  pieces = [];
+  createConfetti();
+  updateConfetti();
+}
+</script>
+
+</body>
+</html>
